@@ -1,48 +1,60 @@
-let formElement = document.querySelector(".js-form");
-let amountElement = document.querySelector(".js-amount");
-let inputCurrencyElement = document.querySelector(".js-inputCurrency");
-let outputCurrencyElement = document.querySelector(".js-outputCurrency");
-let resultElement = document.querySelector(".js-result");
+{
+    const calculateResult = (inputCurrency, amount, outputCurrency) => {
+        const pln = 1;
+        const eur = 4.76;
+        const usd = 4.68;
+        const gbd = 5.57;
 
-let pln = 1;
-let eur = 4.76;
-let usd = 4.68;
-let gbd = 5.57;
+        switch (inputCurrency) {
+            case "PLN":
+                if (outputCurrency === "PLN") return (amount * 1);
+                else if (outputCurrency === "EUR") return (amount * pln / eur);
+                else if (outputCurrency === "USD") return (amount * pln / usd);
+                else if (outputCurrency === "GBD") return (amount * pln / gbd);
+            case "EUR":
+                if (outputCurrency === "EUR") return (amount * 1);
+                else if (outputCurrency === "USD") return (amount * eur / usd);
+                else if (outputCurrency === "GBD") return (amount * eur / gbd);
+                else if (outputCurrency === "PLN") return (amount * eur / pln);
+            case "USD":
+                if (outputCurrency === "USD") return (amount * 1);
+                else if (outputCurrency === "EUR") return (amount * usd / eur);
+                else if (outputCurrency === "GBD") return (amount * usd / gbd);
+                else if (outputCurrency === "PLN") return (amount * usd / pln);
+            case "GBD":
+                if (outputCurrency === "GBD") return (amount * 1);
+                else if (outputCurrency === "EUR") return (amount * gbd / eur);
+                else if (outputCurrency === "USD") return (amount * gbd / usd);
+                else if (outputCurrency === "PLN") return (amount * gbd / pln);
+        }
+    };
 
-formElement.addEventListener("submit", (event) => {
-    event.preventDefault();
+    const updateResultText = (result, outputCurrencyElement) => {
+        const resultElement = document.querySelector(".js-result");
+        resultElement.innerText = `${result.toFixed(2)} ${outputCurrencyElement.value}`;
+    };
 
-    let inputCurrency = inputCurrencyElement.value;
-    let outputCurrency = outputCurrencyElement.value;
-    let amount = amountElement.value;
+    const onFormSubmit = (event) => {
+        event.preventDefault();
 
-    switch (inputCurrency) {
-        case "PLN":
-            if (outputCurrency === "PLN") result = (amount * 1);
-            else if (outputCurrency === "EUR") result = (amount * pln / eur);
-            else if (outputCurrency === "USD") result = (amount * pln / usd);
-            else if (outputCurrency === "GBD") result = (amount * pln / gbd);
-            break;
-        case "EUR":
-            if (outputCurrency === "EUR") result = (amount * 1);
-            else if (outputCurrency === "USD") result = (amount * eur / usd);
-            else if (outputCurrency === "GBD") result = (amount * eur / gbd);
-            else if (outputCurrency === "PLN") result = (amount * eur / pln);
-            break;
-        case "USD":
-            if (outputCurrency === "USD") result = (amount * 1);
-            else if (outputCurrency === "EUR") result = (amount * usd / eur);
-            else if (outputCurrency === "GBD") result = (amount * usd / gbd);
-            else if (outputCurrency === "PLN") result = (amount * usd / pln);
-            break;
-        case "GBD":
-            if (outputCurrency === "GBD") result = (amount * 1);
-            else if (outputCurrency === "EUR") result = (amount * gbd / eur);
-            else if (outputCurrency === "USD") result = (amount * gbd / usd);
-            else if (outputCurrency === "PLN") result = (amount * gbd / pln);
-            break;
-    }
+        const amountElement = document.querySelector(".js-amount");
+        const inputCurrencyElement = document.querySelector(".js-inputCurrency");
+        const outputCurrencyElement = document.querySelector(".js-outputCurrency");
 
-    resultElement.innerText = `${result.toFixed(2)} ${outputCurrencyElement.value}`;
-});
+        const inputCurrency = inputCurrencyElement.value;
+        const outputCurrency = outputCurrencyElement.value;
+        const amount = amountElement.value;
 
+        const result = calculateResult(inputCurrency, amount, outputCurrency);
+
+        updateResultText(result, outputCurrencyElement);
+    };
+
+    const init = () => {
+        const formElement = document.querySelector(".js-form");
+
+        formElement.addEventListener("submit", onFormSubmit);
+    };
+
+    init();
+}
